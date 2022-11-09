@@ -1,11 +1,20 @@
 package tests;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
+
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class SignInTests extends BasicTest {
 
-	@Test(priority = 1000)
+	// @Test(priority = 1000)
 	public void checksInputTypes() throws InterruptedException {
 		signInPage.getUsernameInput().click();
 		Assert.assertEquals(signInPage.getUsernameInput().getAttribute("type"), "text",
@@ -16,7 +25,7 @@ public class SignInTests extends BasicTest {
 		Thread.sleep(1000);
 	}
 
-	@Test(priority = 100)
+	// @Test(priority = 100)
 	public void displayErrorWhenUsernameIsRequired() throws InterruptedException {
 		signInPage.getLoginButton().click();
 
@@ -27,7 +36,7 @@ public class SignInTests extends BasicTest {
 		Thread.sleep(1000);
 	}
 
-	@Test(priority = 200)
+	// @Test(priority = 200)
 	public void displayErrorWhenPasswordIsRequired() throws InterruptedException {
 		signInPage.getUsernameInput().sendKeys("standard_user");
 		signInPage.getLoginButton().click();
@@ -39,7 +48,7 @@ public class SignInTests extends BasicTest {
 		Thread.sleep(1000);
 	}
 
-	@Test(priority = 300)
+	// @Test(priority = 300)
 	public void standardSignIn() throws InterruptedException {
 		signInPage.getUsernameInput().sendKeys("standard_user");
 		signInPage.getPasswordInput().sendKeys("secret_sauce");
@@ -47,7 +56,7 @@ public class SignInTests extends BasicTest {
 		signInPage.getLoginButton().click();
 	}
 
-	@Test(priority = 400)
+	// @Test(priority = 400)
 	public void displayErrorWhenUserIsLockedOut() throws InterruptedException {
 		signInPage.getUsernameInput().sendKeys("locked_out_user");
 		signInPage.getPasswordInput().sendKeys("secret_sauce");
@@ -62,7 +71,7 @@ public class SignInTests extends BasicTest {
 		Thread.sleep(1000);
 	}
 
-	@Test(priority = 500)
+	// @Test(priority = 500)
 	public void problemUserSignIn() throws InterruptedException {
 		signInPage.getUsernameInput().sendKeys("problem_user");
 		signInPage.getPasswordInput().sendKeys("secret_sauce");
@@ -70,7 +79,7 @@ public class SignInTests extends BasicTest {
 		signInPage.getLoginButton().click();
 	}
 
-	@Test(priority = 600)
+	// @Test(priority = 600)
 	public void performanceGlitchUserSignIn() throws InterruptedException {
 		signInPage.getUsernameInput().sendKeys("performance_glitch_user");
 		signInPage.getPasswordInput().sendKeys("secret_sauce");
@@ -78,7 +87,7 @@ public class SignInTests extends BasicTest {
 		signInPage.getLoginButton().click();
 	}
 
-	@Test(priority = 700)
+	// @Test(priority = 700)
 	public void displayErrorWhenPasswordOrUsernameAreNotCorrect() throws InterruptedException {
 
 		// Wrong username, but correct password
@@ -96,6 +105,7 @@ public class SignInTests extends BasicTest {
 
 		// Wrong password, but correct username
 		signInPage.getUsernameInput().clear();
+
 		signInPage.getUsernameInput().sendKeys("standard_user");
 		signInPage.getPasswordInput().sendKeys("secretsauce");
 
@@ -108,4 +118,19 @@ public class SignInTests extends BasicTest {
 		Thread.sleep(1000);
 
 	}
+
+	@Test(priority = 800)
+	public void takeScreenshot() throws IOException {
+
+		// Taking a screenshot at a specific date and time
+
+		Date currentdate = new Date();
+		String screenshotfilename = currentdate.toString().replace(" ", "-").replace(":", "-");
+		System.out.println(screenshotfilename);
+
+		File TakesScreenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+		FileUtils.copyFile(TakesScreenshot, new File("img/" + screenshotfilename + ".png"));
+
+	}
+
 }
